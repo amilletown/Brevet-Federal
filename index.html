@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Brevet BF">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="favicon.png">
+<style>html,body{margin:0}:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Brevet Fédéral Nottwil</title>
+<meta name="theme-color" content="#C8102E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+/* Layout : barre de sections collante, contenu en fiches de terrain, auto-test en fin de parcours */
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --sunk:#EFF2F5;
+  --ink:#13181C; --muted:#5C6974; --line:#DCE2E7;
+  --accent:#C8102E; --accent-soft:#FBE9EC;
+  --warn:#8F5600; --warn-soft:#FDF2DF;
+  --ok:#1C6B4A; --ok-soft:#E4F2EB;
+  --display:"Oswald",'Helvetica Neue',Arial,sans-serif;
+  --body:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1316; --surface:#161C20; --sunk:#1C2429;
+    --ink:#ECF0F2; --muted:#98A5AF; --line:#29323A;
+    --accent:#FF5A6E; --accent-soft:#2B1419;
+    --warn:#E6B264; --warn-soft:#2A2012;
+    --ok:#6DCCA2; --ok-soft:#12251D;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1316; --surface:#161C20; --sunk:#1C2429;
+  --ink:#ECF0F2; --muted:#98A5AF; --line:#29323A;
+  --accent:#FF5A6E; --accent-soft:#2B1419;
+  --warn:#E6B264; --warn-soft:#2A2012;
+  --ok:#6DCCA2; --ok-soft:#12251D;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:880px;margin:0 auto;padding-inline:18px;padding-block:22px 80px}
+h1,h2,h3,h4,.lbl,.pill,nav button{font-family:var(--display);font-weight:500;text-wrap:balance}
+h1{font-size:clamp(27px,5.6vw,40px);line-height:1.05;margin:0 0 8px;font-weight:600;letter-spacing:-.01em}
+h2{font-size:clamp(20px,3.4vw,26px);margin:0 0 10px;font-weight:600}
+h3{font-size:16px;margin:0 0 6px;letter-spacing:.02em;text-transform:uppercase;color:var(--accent)}
+h4{font-size:15.5px;margin:14px 0 4px;font-weight:600}
+p{margin:0 0 11px}
+ul,ol{margin:0 0 11px;padding-left:19px}
+li{margin-bottom:4px}
+.lbl{text-transform:uppercase;letter-spacing:.13em;font-size:11px;color:var(--muted);display:block}
+em.src{display:block;font-size:12px;color:var(--muted);margin-top:10px;font-style:italic}
+
+header{border-top:5px solid var(--accent);padding-top:18px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px}
+.meta span{font-family:var(--display);font-size:12.5px;letter-spacing:.05em;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:600}
+
+.alert{background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);border-radius:3px;padding:14px 16px;margin:18px 0}
+.alert .lbl{color:var(--warn);margin-bottom:5px}
+.alert p{font-size:14.5px;margin:0 0 7px}
+.alert p:last-child{margin:0}
+
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);padding-block:9px;
+  border-bottom:1px solid var(--line);display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;margin-bottom:6px}
+nav button{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--muted);
+  border:1px solid var(--line);border-radius:3px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+nav button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+nav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+section{padding-block:22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:15px 17px;margin-bottom:13px}
+.card>*:last-child{margin-bottom:0}
+.card.sunk{background:var(--sunk)}
+.pill{display:inline-block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent-soft);
+  color:var(--accent);padding:3px 9px;border-radius:2px;margin-bottom:9px}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:3px;margin-bottom:13px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:0}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:500;text-transform:uppercase;letter-spacing:.06em;font-size:11px;
+  color:var(--muted);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+tr:last-child td{border-bottom:none}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:0 0 11px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;gap:0 11px;padding:9px 0;border-bottom:1px solid var(--line);margin:0}
+.steps li:last-child{border-bottom:none}
+.steps li::before{content:counter(s);font-family:var(--display);font-size:19px;font-weight:600;color:var(--accent);line-height:1.1}
+.steps li b{display:block}
+.steps li span{font-size:14px;color:var(--muted);display:block}
+
+.rules{list-style:none;padding:0;margin:0}
+.rules li{counter-increment:r;display:grid;grid-template-columns:26px 1fr;gap:0 10px;padding:7px 0;border-bottom:1px solid var(--line);margin:0;font-size:15px}
+.rules li:last-child{border-bottom:none}
+.rules li::before{content:counter(r);font-family:var(--display);font-size:13px;color:var(--accent);
+  background:var(--accent-soft);border-radius:2px;text-align:center;line-height:20px;height:20px;margin-top:2px}
+.rules{counter-reset:r}
+
+.kv{display:grid;gap:7px}
+.kv>div{display:grid;grid-template-columns:auto 1fr;gap:9px;font-size:15px;align-items:start}
+.kv .mk{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:8px}
+
+.q-block{border-left:3px solid var(--accent);padding-left:13px;margin-bottom:14px}
+.q-block b{font-family:var(--display);font-size:16px;font-weight:500;display:block;margin-bottom:4px}
+.q-block p{font-size:14.5px;color:var(--muted);margin:0}
+
+.srch{width:100%;font-family:var(--body);font-size:15px;padding:10px 12px;border:1px solid var(--line);
+  border-radius:3px;background:var(--surface);color:var(--ink);margin-bottom:12px}
+.srch:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.deck-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:11px}
+.counter{font-family:var(--display);font-size:13px;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:11px}
+.chips button{font-family:var(--display);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:2px;padding:5px 9px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.flash{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:24px 20px;min-height:196px;
+  display:flex;flex-direction:column;justify-content:center;cursor:pointer;margin-bottom:10px}
+.flash:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.flash .side{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-family:var(--display);color:var(--muted);margin-bottom:8px}
+.flash .fq{font-family:var(--display);font-size:clamp(17px,3.2vw,22px);font-weight:500;line-height:1.28}
+.flash .fa{font-size:15.5px;line-height:1.5}
+.hint{font-size:12.5px;color:var(--muted);text-align:center;margin:0 0 10px}
+.ctrls{display:flex;gap:7px}
+.ctrls button{flex:1;font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:3px;padding:11px;cursor:pointer}
+.ctrls button:hover{border-color:var(--accent);color:var(--accent)}
+.ctrls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+footer{border-top:1px solid var(--line);margin-top:26px;padding-top:14px;font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+</head>
+<body>
+<header>
+  <div class="meta">
+    <span>SWISS SNOWSPORTS · EXAMEN PROFESSIONNEL <b>2026</b></span>
+    <span>NOTTWIL · <b>VENDREDI 9 OCTOBRE</b></span>
+    <span>DISCIPLINE <b>SNOWBOARD</b></span>
+  </div>
+  <h1>Brevet fédéral — révision</h1>
+  <p style="color:var(--muted);max-width:60ch">Lignes directrices officielles pour les candidat·e·s (v1.0, juillet 2026), exemple de jeu de rôle publié par Swiss Snowsports, et micro-learnings SnowHow.</p>
+  <div class="alert">
+    <span class="lbl">À corriger en priorité</span>
+    <p><b>La présentation dure 15 minutes, pas 20.</b> Tolérance ±1 minute. Le support actuel est calibré pour 20 : il faut couper un tiers.</p>
+    <p>Le portfolio devait déclarer l'usage d'outils d'IA et porter la signature d'authenticité. L'usage est autorisé ; c'est la transparence qui est exigée.</p>
+  </div>
+</header>
+
+<nav role="tablist" aria-label="Sections"></nav>
+<div id="panes"></div>
+
+<footer>
+  Sources : Swiss Snowsports, <i>Lignes directrices pour les candidates et candidats</i> v1.0 (juillet 2026) · <i>Exemple de jeu de rôle BF 2026</i> (21.07.2026) · micro-learnings SnowHow (Weber 2005 ; OFSPO <i>Manuel snowboard 2024</i> et <i>Manuel ski pour les enfants et les jeunes 2024</i>, Macolin ; J+S brochure Psyché ; Academy n° 33 et 37 SSSA ; Racing Concept Swiss-Ski ; SKUS ; Linz 2004 ; Watzlawick).
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var S = [
+
+/* ───────────── 1. EXAMEN ───────────── */
+{id:"exam", nav:"L'examen", html:`
+<span class="lbl">Vue d'ensemble</span>
+<h2>Deux épreuves, six points d'appréciation</h2>
+<div class="tw"><table>
+<tr><th>Épreuve</th><th>Point d'appréciation</th><th>Contenu</th><th>Durée</th></tr>
+<tr><td rowspan="3"><b>1<br>Portfolio personnel</b></td><td>Portfolio personnel</td><td>Réflexion écrite sur sa propre pratique professionnelle</td><td>remis</td></tr>
+<tr><td>Présentation</td><td>Présentation des principaux enseignements</td><td><b>15 min ±1</b></td></tr>
+<tr><td>Entretien</td><td>Approfondissement du portfolio</td><td><b>10 min</b></td></tr>
+<tr><td rowspan="3"><b>2<br>Communication</b></td><td>Jeu de rôle</td><td>Communication dans une situation concrète</td><td><b>~10 min</b> (+10 prép.)</td></tr>
+<tr><td>Réflexion</td><td>Réflexion sur ses propres actions</td><td><b>10 min</b> (dont 5 prép.)</td></tr>
+<tr><td>Connaissances professionnelles</td><td>Analyse d'exemples de cas concrets liés à la vie professionnelle</td><td>cas pratique</td></tr>
+</table></div>
+<p>Chaque épreuve est évaluée par <b>deux expert·e·s</b>, qui peuvent alterner entre les deux. <b>L'ordre des épreuves n'est pas imposé</b> — tu peux commencer par le jeu de rôle.</p>
+
+<div class="card">
+<h3>Les cinq critères, sur toute la journée</h3>
+<div class="kv">
+<div><span class="mk"></span><span><b>Action fondée sur des arguments professionnels</b> — tu dis pourquoi, pas seulement quoi.</span></div>
+<div><span class="mk"></span><span><b>Capacité d'analyse et de réflexion</b> — tu décortiques au lieu de raconter.</span></div>
+<div><span class="mk"></span><span><b>Communication adaptée aux destinataires</b> — on ne parle pas à un enfant comme à un parent.</span></div>
+<div><span class="mk"></span><span><b>Comportement de conduite et capacité à prendre des décisions</b> — tu tranches et tu l'assumes.</span></div>
+<div><span class="mk"></span><span><b>Lien avec la pratique et applicabilité</b> — ça tient sur la neige.</span></div>
+</div>
+</div>
+
+<div class="card sunk">
+<h3>La phrase qui change la préparation</h3>
+<p style="margin:0">« L'évaluation ne porte pas sur des connaissances spécialisées spécifiques ni sur des solutions types prédéfinies. Plusieurs approches correctes peuvent être appropriées, à condition qu'elles soient <b>justifiées de manière claire, adaptées à la situation et mises en œuvre avec professionnalisme</b>. »</p>
+</div>
+<p>Tu n'as donc pas à trouver la bonne réponse. Tu as à en choisir une et à la défendre. Seules les prestations <b>observables pendant l'examen</b> sont évaluées — plus le portfolio écrit remis.</p>
+
+<h4>Présentation — ce qu'ils attendent</h4>
+<ul>
+<li>Durée de 15 minutes (±1 minute).</li>
+<li>Démonstration des <b>principaux enseignements</b>.</li>
+<li><b>Pas un résumé</b> de l'ensemble du portfolio.</li>
+<li>Mise en évidence du <b>fil rouge</b>.</li>
+<li>Visibilité concernant <b>ton propre processus d'apprentissage</b>.</li>
+</ul>
+<p>Flipchart, supports visuels ou PowerPoint autorisés — <b>uniquement sur ton ordinateur portable, aucun écran externe n'est à disposition</b>. Le bon fonctionnement est de ta responsabilité.</p>
+`},
+
+/* ───────────── 2. ENTRETIEN ───────────── */
+{id:"entretien", nav:"Entretien", html:`
+<span class="lbl">Épreuve 1 · 10 minutes</span>
+<h2>Quatre questions, de plus en plus difficiles</h2>
+<p>Quatre questions principales, 2 à 3 minutes chacune, qui s'enchaînent et montent en difficulté. Les expert·e·s vérifient la compréhension, approfondissent et suscitent la réflexion sur le portfolio et la présentation.</p>
+<p><b>Aucune question portant sur les connaissances hors du contexte thématique n'est posée.</b> Tout part de ton dossier — donc rien à bachoter ici, tout à maîtriser.</p>
+
+<span class="pill">Les chaînes les plus probables</span>
+<div class="q-block"><b>« La décision de sécurité ne se délègue pas — concrètement, que dites-vous à cette mère ? »</b>
+<p>Donne la phrase, pas la théorie. Reformule son inquiétude, pose ta lecture professionnelle, offre une alternative concrète. Fermeté sur la décision, souplesse sur la solution.</p></div>
+<div class="q-block"><b>« Votre cas 2 est en ski. Comment enseigneriez-vous ce backflip en snowboard ? »</b>
+<p>La méthode se transpose intégralement, la technique change. Bascule/angulation du pied arrière vers le tail puis extension des hanches ; position compacte genoux fléchis ; arrêt de rotation par extension ; atterrissage en fullbase amorti par flexion des deux genoux. Prérequis : Basic air.</p></div>
+<div class="q-block"><b>« D'où sortent vos 40 % ? »</b>
+<p>Méthode et période, et borne le chiffre si c'est une estimation. Un chiffre honnêtement borné vaut mieux qu'un chiffre précis indéfendable.</p></div>
+<div class="q-block"><b>« Une semaine entière sur le tapis — manque d'ambition ? »</b>
+<p>Renverse la prémisse : l'ambition était dans l'objectif, pas dans le terrain. La variable critique était la confiance. Et l'objectif de fin de semaine a été atteint.</p></div>
+<div class="q-block"><b>« C'est facile de vous critiquer trois ans après. Sur le moment ? »</b>
+<p>Accorde le point, puis montre les alternatives qui existaient ce jour-là : zone sans téléski, report, renfort. La compétence n'est pas d'avoir la solution parfaite, c'est de s'autoriser à ralentir.</p></div>
+<div class="q-block"><b>« Apprendre un backflip à un enfant de 12 ans — où est la limite ? »</b>
+<p>Deux ans de suivi documenté, demande des élèves validée par les parents, équipement imposé, progression par paliers, vigilance renforcée sur le cadet. La limite, c'est le go/no-go.</p></div>
+
+<div class="card">
+<h3>Méthode de réponse — trois temps</h3>
+<ol><li><b>Assume</b> — jamais de défausse.</li><li><b>Justifie</b> — le raisonnement, pas l'anecdote.</li><li><b>Projette</b> — ce que tu fais aujourd'hui.</li></ol>
+<p style="margin:0">Deux à trois minutes par question : une réponse construite, pas un paragraphe récité.</p>
+</div>
+<div class="card sunk">
+<h3>Trois vérifications avant jeudi soir</h3>
+<ul style="margin:0"><li>L'accord des parents pour le projet backflip.</li><li>La méthode exacte derrière les 40 % (fichier, période).</li><li>La voie de formation de formateurs, si tu maintiens ton troisième objectif.</li></ul>
+</div>
+`},
+
+/* ───────────── 3. JEU DE RÔLE ───────────── */
+{id:"role", nav:"Jeu de rôle", html:`
+<span class="lbl">Épreuve 2 · 10 min de jeu, 10 de préparation</span>
+<h2>La structure fait la note</h2>
+<p>Tu endosses <b>toujours</b> le rôle du professeur de sports de neige. Un acteur joue l'hôte. <b>Aucun matériel ni document autorisé.</b> Préparation : 10 minutes, dont 5 d'informations sur le déroulement et 5 de préparation réelle.</p>
+<p>Évaluation : <b>compétences exclusivement liées à la communication et à la conduite</b>. Pas la technique, pas la justesse de la solution.</p>
+<div class="card">
+<h3>Ce qui est noté, mot pour mot</h3>
+<div class="kv">
+<div><span class="mk"></span><span>Comment tu <b>structures la situation</b></span></div>
+<div><span class="mk"></span><span>Comment tu <b>écoutes activement</b></span></div>
+<div><span class="mk"></span><span>Comment tu <b>prends en compte différents points de vue</b></span></div>
+<div><span class="mk"></span><span>Comment tu <b>élabores des solutions</b></span></div>
+<div><span class="mk"></span><span>Comment tu <b>passes des accords contraignants</b></span></div>
+</div>
+<p style="margin-top:9px;margin-bottom:0">Les cinq éléments essentiels : communication · conduite · comportement professionnel · résolution des conflits · capacité à prendre des décisions.</p>
+</div>
+
+<span class="pill">Ta colonne vertébrale — modèle des 4 phases (Weber 2005)</span>
+<ol class="steps">
+<li><b>Communiquer le message — clarifier</b><span>Le message clé, clairement et directement, dès le début. Plus le sujet est délicat, plus l'entrée doit être franche. « Comment transmettre le message directement et avec respect ? »</span></li>
+<li><b>Recueillir la réaction — percevoir les émotions</b><span>Après le message vient l'écoute. L'autre a besoin de temps pour encaisser. L'erreur la plus fréquente est d'interrompre trop tôt : une étude sur des médecins mesure 75 %. « Comment réagit mon interlocuteur ? »</span></li>
+<li><b>Chercher des solutions — ouvrir une perspective</b><span>Une fois l'émotion retombée, on regarde devant. On développe des perspectives <b>sans faire de reproches</b>. « Comment pouvons-nous continuer ensemble ? »</span></li>
+<li><b>Introduire dans le quotidien — stabiliser la relation</b><span>Conclure de façon constructive, préserver la relation, offrir une perspective engageante. C'est ici que se jouent les accords contraignants : nomme les prochaines étapes et fais-les valider.</span></li>
+</ol>
+
+<div class="card">
+<h3>Techniques à placer pendant l'échange</h3>
+<ul style="margin:0">
+<li><b>Messages à la première personne</b> — « J'ai observé que… » et non « Tu as… ».</li>
+<li><b>Écoute active</b> — paraphraser, refléter l'émotion, demander des précisions, lire le non-verbal.</li>
+<li><b>Questions ouvertes</b> — clarifier les perspectives : « Quel est ton ressenti ? »</li>
+<li><b>Résumer</b> — assurer une compréhension commune avant d'avancer.</li>
+<li><b>Orientation solution</b> — se focaliser sur les prochaines étapes, pas sur la faute.</li>
+<li><b>Règle des 3 points</b> — trois points essentiels, pour rester factuel.</li>
+<li><b>Empathie plutôt que pitié</b> — « Comment je peux t'aider ? » a plus d'impact que « Ça me fait de la peine ».</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Préparation, pendant, suivi</h3>
+<h4>Préparation</h4>
+<ul><li>Définir clairement le thème et l'objectif</li><li>Rassembler les faits et observations</li><li>Réfléchir à sa propre attitude</li><li>Définir le cadre : lieu, moment, ambiance</li><li>Formuler à l'avance la phrase d'introduction</li></ul>
+<h4>Suivi</h4>
+<ul style="margin:0"><li>Enregistrer les résultats, reprendre si nécessaire</li><li>Réflexion : ce qui a marché, ce qui peut s'améliorer</li><li>Demander un feed-back et ajuster</li></ul>
+</div>
+
+<div class="card">
+<h3>Quatre situations complexes typiques</h3>
+<ul style="margin:0">
+<li><b>Quand les émotions guident l'entretien</b> — l'échange quitte les faits. Parler délibérément de son propre mode de communication.</li>
+<li><b>Communication dans les groupes sur la piste</b> — rôles pas clairs, certains dominent. Les groupes performants : écoute active, respect mutuel, conflits traités de façon constructive, instruction claire.</li>
+<li><b>Problèmes et conflits sur la piste</b> — objectifs, attentes ou rôles inconciliables. Entretien factuel rapide, idéalement sur terrain neutre (avant le prochain exercice, sur le téléski) pour éviter l'escalade.</li>
+<li><b>Messages négatifs et entretiens d'évaluation</b> — structure claire, langage honnête, conclusion respectueuse et motivante.</li>
+</ul>
+</div>
+
+<span class="pill">L'exemple officiel publié — étude de cas 2 : nature, environnement, durabilité</span>
+<div class="card">
+<p>Sortie freeride sur la journée, six participants de niveau avancé, zone <b>non soumise à autorisation</b> selon l'ORisque. Avant la première descente, tu as informé le groupe de l'itinéraire et signalé expressément le site de protection de la faune balisé, en indiquant clairement l'interdiction d'y pénétrer. Plusieurs participants quittent le couloir et s'y engagent. Tu regroupes en lieu sûr.</p>
+<p><b>Andrea</b> défend son comportement : les conditions d'enneigement y étaient nettement meilleures, et une seule descente ne représente pas une différence notable pour la faune. <b>Plusieurs participants sont du même avis.</b></p>
+<h4>Les quatre points à aborder</h4>
+<ul style="margin-bottom:0">
+<li>Ta réaction immédiate et la prise de conscience des conséquences par le groupe</li>
+<li>L'importance des sites de protection et les conséquences de petites intrusions d'apparence mineure</li>
+<li>Ta gestion d'un hôte qui minimise <b>et qui a l'approbation du groupe</b></li>
+<li>La marche à suivre et les accords clairs pour la suite de la journée</li>
+</ul>
+</div>
+<p>Le piège est le troisième point. Si tu ne traites qu'Andrea, tu rates la conduite de groupe : nomme le fait que l'avis est partagé, traite-le, puis reviens à ta décision.</p>
+`},
+
+/* ───────────── 4. RÉFLEXION ───────────── */
+{id:"reflexion", nav:"Réflexion", html:`
+<span class="lbl">Épreuve 2 · 10 minutes dont 5 de préparation</span>
+<h2>Quatre cases à remplir</h2>
+<p>À l'issue du jeu de rôle, tu réfléchis à ta propre démarche. C'est noté à part, et ça se prépare : tu as cinq minutes avant de parler.</p>
+<div class="tw"><table>
+<tr><th>Case</th><th>Ce qu'ils attendent</th></tr>
+<tr><td><b>Ce qui est réussi</b></td><td>Un élément précis de ta conduite, pas « ça s'est bien passé ».</td></tr>
+<tr><td><b>Ce qui est moins réussi</b></td><td>Un vrai point faible, identifié par toi. C'est ce qui crédibilise le reste.</td></tr>
+<tr><td><b>Les alternatives identifiées</b></td><td>Qu'aurais-tu pu faire autrement, à quel moment précis ?</td></tr>
+<tr><td><b>Les enseignements</b></td><td>Ce que tu transposes à des situations futures, formulé comme une règle.</td></tr>
+</table></div>
+<div class="card">
+<h3>Les deux exigences que la plupart oublient</h3>
+<ul style="margin:0">
+<li>Une <b>évaluation de l'impact de ton comportement sur ton vis-à-vis</b> — « j'ai vu qu'elle se fermait quand j'ai répété l'interdiction ».</li>
+<li>Des <b>pistes concrètes de progression</b> pour des situations futures. Pas des généralités.</li>
+</ul>
+</div>
+<div class="card sunk">
+<h3>Ton avantage</h3>
+<p style="margin:0">C'est l'exercice de ton cas pratique 3. Tu as déjà écrit une autocritique à trois niveaux sur l'accident du téléski — terrain, délégation de la décision, ordre de montée. Applique la même grille à chaud.</p>
+</div>
+`},
+
+/* ───────────── 5. CAS PRATIQUE ───────────── */
+{id:"cas", nav:"Cas pratique", html:`
+<span class="lbl">Épreuve 2 · connaissances professionnelles</span>
+<h2>Le cas pratique et ses imprévus</h2>
+<p>Les connaissances se fondent sur un cas pratique. Tu réponds à plusieurs questions qui s'enchaînent. En cours de route, <b>de nouvelles informations peuvent être fournies ou des événements imprévus survenir</b> — les lignes directrices les appellent <i>critical incidents</i> — ce qui nécessite d'adapter la démarche.</p>
+<p>Tu analyses des situations, justifies ta démarche, proposes des <b>options d'action</b> et réponds aux questions. L'accent est sur l'application raisonnée, <b>pas sur l'apprentissage par cœur de contenus isolés</b>.</p>
+<div class="card">
+<h3>Méthode quand l'imprévu tombe</h3>
+<ol style="margin:0">
+<li><b>Nomme ce qui change.</b> « Cette information change ma lecture du risque, voilà pourquoi. »</li>
+<li><b>Reprends ta décision à voix haute.</b> Ils notent la capacité à décider, pas la constance.</li>
+<li><b>Propose des options</b>, puis tranche et justifie.</li>
+<li><b>Ordre de priorité :</b> sécurité d'abord, confort ensuite, commercial en dernier.</li>
+</ol>
+</div>
+<div class="card sunk">
+<h3>Les trois facteurs de la situation présente</h3>
+<p>Toute analyse de cas peut se structurer là-dessus — c'est le cadre officiel :</p>
+<ul style="margin:0">
+<li><b>Facteurs situationnels</b> — équipement, météo, qualité de neige, terrain, affluence, heure.</li>
+<li><b>Facteurs personnels</b> — connaissances préalables, besoins, forme physique, émotions, âge.</li>
+<li><b>Facteurs normatifs</b> — règles FIS, SKUS, signalisation, directives de l'école, cadre légal.</li>
+</ul>
+<em class="src">Plus tu anticipes de variables lors de la planification, plus il est facile d'adapter sur place. Mais ce ne sont que des prévisions : observe toujours la situation présente pendant la leçon.</em>
+</div>
+`},
+
+/* ───────────── 6. DROIT & SÉCURITÉ ───────────── */
+{id:"droit", nav:"Droit & sécurité", html:`
+<span class="lbl">Connaissances professionnelles</span>
+<h2>Droit, règles et sécurité</h2>
+
+<span class="pill">Les 10 règles FIS sur la piste</span>
+<div class="card">
+<p style="font-size:14.5px;color:var(--muted)">Reconnues internationalement. Avec les règles SKUS (spécifiques à la Suisse), elles ne sont <b>pas inscrites dans la loi</b> mais ont une <b>importance juridique</b> et peuvent être prises en compte devant un tribunal en cas d'accident.</p>
+<ol class="rules">
+<li>Ne pas mettre autrui en danger ou lui porter préjudice</li>
+<li>Descendre à vue ; adapter sa vitesse et son comportement à ses capacités personnelles et aux conditions</li>
+<li>Respecter la trajectoire des skieurs et snowboardeurs situés en aval</li>
+<li>Dépasser à une distance suffisante</li>
+<li>Avant de s'engager sur la piste ou de virer vers l'amont, regarder vers le haut de la piste</li>
+<li>Ne s'arrêter que sur le bord de la piste ou dans des endroits bien visibles</li>
+<li>Monter ou descendre à pied uniquement sur le bord de la piste</li>
+<li>Respecter le balisage et la signalisation</li>
+<li>Prêter secours et alerter les services de sauvetage</li>
+<li>Les personnes impliquées dans un accident, ainsi que les témoins, sont tenues de faire connaître leur identité</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>SKUS</h3>
+<p>Commission suisse pour la prévention des accidents sur les infrastructures pour sports de neige. Trois directives particulièrement importantes pour les enseignants :</p>
+<ol style="margin-bottom:0"><li>Directives dans les snowparks</li><li>Directives supplémentaires pour snowboardeurs</li><li>Directive importante pour l'utilisation du télésiège</li></ol>
+</div>
+
+<div class="card">
+<h3>Les 4 directives du snowpark</h3>
+<ol style="margin:0">
+<li><b>Regardez avant de sauter</b> — passer en revue tous les éléments (hauteur, longueur, difficulté), vérifier l'état des zones d'envol et de réception, ne sauter que si les éléments sont bien préparés.</li>
+<li><b>Planifiez votre passage</b> — décider à l'avance quelle figure sur quel élément, rester concentré du premier au dernier. Vitesse, prise d'élan et envol influencent hauteur, longueur et position à la réception.</li>
+<li><b>Allez-y gentiment</b> — commencer par ce qu'on maîtrise, demander conseil, petits éléments d'abord, difficulté progressive.</li>
+<li><b>Le respect invite au respect</b> — ne mettre personne en danger, ne s'élancer que si la réception est libre et la quitter rapidement, aider les autres, partager les infos au speedcheck, faire un signe de la main avant de démarrer, porter un équipement de protection.</li>
+</ol>
+<em class="src">Les règles FIS et les directives SKUS s'appliquent aussi dans le snowpark. Le snowpark relève de la responsabilité des remontées mécaniques.</em>
+</div>
+
+<span class="pill">LAR / OAR — activités à risque</span>
+<div class="card">
+<p>Loi fédérale sur les guides de montagne et les organisateurs d'autres activités à risque, en vigueur depuis <b>2014</b> (révision 2019). Elle régit l'enseignement hors des pistes sécurisées.</p>
+<div class="tw"><table>
+<tr><th>Point</th><th>Règle</th></tr>
+<tr><td>Autorisation</td><td>Réservée aux titulaires du <b>brevet fédéral</b> ou formation équivalente. Nécessaire <b>dès le premier franc</b> de chiffre d'affaires.</td></tr>
+<tr><td>Non soumis</td><td>Hors-piste faciles <b>jusqu'au niveau L</b> (échelle CAS) ; pistes de descente <b>jaunes ouvertes</b>.</td></tr>
+<tr><td>Avec autorisation</td><td>Hors-piste <b>jusqu'au niveau D</b> (difficile), et uniquement <b>sans risque de chute</b>.</td></tr>
+<tr><td>Interdit à tous</td><td>Ascensions avec moyens auxiliaires (crampons, corde, piolet) · randonnées et hors-piste <b>sur glaciers</b>.</td></tr>
+<tr><td>Diligence (art. 2 LAR)</td><td>Informer des dangers · vérifier les capacités · matériel en bon état et conditions appropriées · personnel qualifié · respecter nature et environnement.</td></tr>
+<tr><td>Assurance</td><td>RC professionnelle, couverture minimale <b>5 millions CHF</b>.</td></tr>
+<tr><td>Renouvellement</td><td>Tous les <b>4 ans</b>, avec formation continue Backcountry (2 jours ou module Backcountry Specialist).</td></tr>
+<tr><td>Perfectionnement général</td><td>Tous les <b>2 ans</b>, pour tous les professeurs, autorisation ou non.</td></tr>
+<tr><td>Outils sécurité</td><td>Grille <b>3×3</b> · White Risk · cartes de déclivité · zones de tranquillité pour la faune.</td></tr>
+</table></div>
+</div>
+
+<span class="pill">Obligation de diligence</span>
+<div class="card">
+<p>Prendre <b>toutes les mesures raisonnables</b> pour prévenir dommages, dangers et accidents : agir de manière prévoyante, respecter les prescriptions, exclure autant que possible les risques.</p>
+<h4>Base légale</h4>
+<p>Il n'existe <b>aucune loi spécifique</b> réglementant le comportement des professeurs de sports de neige, ni au niveau cantonal ni fédéral. En cas d'accident, la responsabilité se fonde sur le <b>Code civil (CC)</b>, qui inclut le <b>Code des obligations (CO)</b>. Le pénal relève du <b>Code pénal (CP)</b>.</p>
+<p>Le contrat de professeur relève du <b>mandat (art. 394 CO)</b>. Pour le degré de diligence, l'art. 398 CO renvoie à l'<b>art. 321a CO</b> : « Le travailleur exécute avec soin le travail qui lui est confié et sauvegarde fidèlement les intérêts légitimes de l'employeur. »</p>
+<p>Les exigences envers un professeur <b>diplômé</b> sont strictes : on attend qu'il possède et apporte les connaissances requises. <b>Il ne peut pas se justifier en invoquant une formation déficiente.</b></p>
+<h4>Diligence accrue</h4>
+<p>Les professeurs sont soumis à une <b>obligation de diligence accrue</b> parce qu'ils sont responsables de <b>mineurs</b>. Le non-respect peut entraîner une responsabilité civile (dommages-intérêts) ou, dans les cas graves, pénale.</p>
+<h4>Exemple officiel</h4>
+<p>Un professeur descend une piste rouge raide avec un groupe de débutants. Un enfant chute gravement parce qu'il est dépassé. <b>Violation</b> : le professeur n'a pas adapté la piste au niveau des participants. Alternative conforme : piste plate et sûre, règles expliquées, rester auprès des plus faibles.</p>
+<h4>Responsabilité individuelle</h4>
+<p style="margin-bottom:0">Les sports de neige comportent un <b>risque résiduel</b> irréductible. Chaque pratiquant doit évaluer lui-même, selon sa forme et la situation, ce qu'il peut réaliser sans se mettre en danger — préparation, équipement adapté, accoutumance incluses.</p>
+<em class="src">L'obligation de diligence n'est pas une loi rigide : elle repose sur le principe de la prudence raisonnable.</em>
+</div>
+
+<span class="pill">Procédure en cas d'accident</span>
+<div class="card">
+<ol class="steps">
+<li><b>Mettre le groupe en sécurité</b></li>
+<li><b>Sécuriser le lieu de l'accident</b></li>
+<li><b>Si nécessaire : alerter les secours</b><span>Qui ? Où ? Quoi ?</span></li>
+<li><b>Rester auprès de la personne blessée</b><span>et attendre les secours</span></li>
+<li><b>Informer</b><span>selon la personne et la blessure : les proches et l'école de sports de neige, le responsable de camp ou du ski club</span></li>
+</ol>
+<h4>Équipement de l'enseignant</h4>
+<p style="margin-bottom:0">Trousse de premiers secours : pansements et matériel de bandage · couverture de survie · gants médicaux · glucose. Numéros : <b>SOS / REGA</b>, école de ski, personne de contact des enfants.</p>
+</div>
+
+<div class="card">
+<h3>Marquages et signaux</h3>
+<ul>
+<li><b>Couleurs des pistes</b> : bleu = facile, rouge = moyen, noir = difficile. Balisage des deux côtés, bords droit et gauche visuellement distincts (hauteurs de poteaux, flèches) pour l'orientation par brouillard ou faible luminosité.</li>
+<li><b>Pistes jaunes</b> : réservées aux skieurs expérimentés. Ni préparées régulièrement ni entièrement sécurisées — aménagées et contrôlées de manière limitée, <b>sans contrôle final</b>. Sécurisées contre les dangers alpins.</li>
+<li><b>Snowparks</b> : balisés en <b>orange</b>, séparés des pistes normales.</li>
+<li><b>Signaux d'avertissement</b> : « Attention croisement », « Goulot d'étranglement », « Ralentir ».</li>
+<li><b>Fermetures</b> : panneaux d'interdiction et cordes pendant l'exploitation. Après le contrôle de fin de journée et jusqu'au lendemain, <b>toutes les installations sont en principe fermées</b> — préparation des pistes, déclenchements d'avalanches. Cette fermeture nocturne n'est pas signalée spécialement mais est obligatoire.</li>
+</ul>
+<em class="src">Le Tribunal fédéral a établi que la responsabilité individuelle commence lorsque le skieur ne tient pas compte d'une signalisation claire (ATF 117 IV 416, consid. 5a).</em>
+</div>
+
+<div class="card">
+<h3>Remontées mécaniques</h3>
+<p><b>Deux règles à citer de mémoire :</b></p>
+<ul>
+<li>« Les enfants qui mesurent <b>moins de 1,25 m</b> ne peuvent prendre un télésiège que s'ils sont accompagnés. L'accompagnant doit pouvoir aider les enfants en cas de besoin. »</li>
+<li>Pour les snowboardeurs : « Aux téléskis et aux télésièges, <b>détache la jambe arrière</b> de la fixation. »</li>
+</ul>
+<h4>Directives de comportement</h4>
+<p>Faire la queue de manière ordonnée · respecter la signalisation · coopérer avec le personnel · embarquement coordonné et rapide · trajet discipliné · aider les autres usagers · quitter rapidement l'installation et libérer la zone de sortie.</p>
+<h4>Introduction aux remontées</h4>
+<p>Introduction claire et calme, idéalement <b>sur terrain plat</b>. Expliquer les dangers mais toujours avec des conseils simples pour les éviter. Consignes claires, procédures faciles. L'observation des autres usagers aide. Prévoir suffisamment de temps.</p>
+<h4>Dangers par type d'installation</h4>
+<ul style="margin-bottom:0">
+<li><b>Tapis roulant</b> — vêtements ou matériel coincés, chute pendant le trajet, immobilisation qui bloque le tapis, collisions avec ceux qui suivent. Garder l'engin dans le sens de la marche, rester calme, libérer vite la sortie.</li>
+<li><b>Téléski à corde / fil-neige</b> — chute entraînant collision, accrochage des vêtements, être heurté par la barre à l'embarquement. Regarder le câble, garder une distance correcte, position droite, s'écarter d'un grand pas.</li>
+<li><b>Arbalètes et assiettes</b> — regarder vers l'intérieur à l'embarquement, engin droit dans la trace, ne pas s'asseoir, rester droit, regarder devant.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Assurances — quatre catégories</h3>
+<ol style="margin:0">
+<li><b>Assurances sociales</b> (obligatoires)</li>
+<li><b>Assurances accidents</b> (obligatoires selon la loi)</li>
+<li><b>Responsabilité civile et indemnités journalières</b> (couverture économique)</li>
+<li><b>Assurances complémentaires ou spéciales</b></li>
+</ol>
+<em class="src">Principe : mutualisation des risques — de nombreux assurés versent des primes, les fonds compensent les pertes de ceux qui subissent un événement assuré et imprévu.</em>
+</div>
+
+<div class="card">
+<h3>Éthique</h3>
+<p>Transposée aux sports de neige :</p>
+<ul><li>La <b>sécurité et le bien-être</b> des clients sont toujours prioritaires.</li>
+<li>Chaque client est traité avec le <b>même respect</b> — quels que soient âge, niveau ou origine.</li>
+<li>Les moniteurs évaluent leurs <b>propres compétences de manière réaliste</b> et agissent de manière responsable.</li></ul>
+<h4>Promesse de valeurs Swiss Snowsports</h4>
+<p style="margin-bottom:0">« La santé psychique et physique de tous les participants aux cours est importante pour nous. Swiss Snowsports <b>n'accepte pas les comportements qui dépassent les limites</b>, que ce soit de la part des participants, des responsables de cours ou de toute autre personne impliquée. »</p>
+<em class="src">Références : boussole éthique Swiss Olympic · Fondation Swiss Sport Integrity pour signaler un incident.</em>
+</div>
+
+<div class="card">
+<h3>Cahier des charges d'une école</h3>
+<p style="margin-bottom:0">Non prescrit par la loi, mais découlant indirectement de diverses prescriptions. Le nom importe peu (cahier des charges, règlement d'organisation, manuel du collaborateur) : <b>la documentation des directives, consignes de sécurité et processus organisationnels est indispensable pour respecter la loi et limiter la responsabilité.</b> Il règle notamment le devoir de diligence et la sécurité, le contrôle de l'équipement, la preuve d'une RC professionnelle suffisante, les preuves de qualification exigées par niveau, et l'obligation de formation continue.</p>
+</div>
+`},
+
+/* ───────────── 7. TECHNIQUE ───────────── */
+{id:"tech", nav:"Technique", html:`
+<span class="lbl">Vocabulaire officiel SnowHow</span>
+<h2>Technique snowboard</h2>
+<p>Les questions techniques porteront <b>uniquement sur le snowboard</b>. Ce qui suit est le vocabulaire exact de la plateforme.</p>
+
+<div class="card">
+<h3>Les 7 formes caractéristiques</h3>
+<p>Modèles de mouvement et de comportement observables concrètement sur la neige. On les trouve <b>à tous les niveaux</b>, avec des difficultés et qualités diverses — une experte descend plus élégamment qu'une débutante, mais les modèles observables sont les mêmes.</p>
+<ol style="margin:0">
+<li>Gérer la situation présente de manière responsable</li>
+<li>Se déplacer efficacement avec des pas au plat et en pente</li>
+<li>Glisser et freiner dans une attitude stable</li>
+<li>Réaliser des virages adaptés au terrain</li>
+<li>Sauter et atterrir avec assurance sur des installations</li>
+<li>Réaliser des tricks en jouant avec le terrain</li>
+<li>Slider sur les boxes et les rails avec une attitude stable</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>Principes de déclenchement</h3>
+<p>Combinaisons de mouvements clés dans la phase de déclenchement, pour effectuer le <b>changement de carres</b>.</p>
+<div class="tw"><table>
+<tr><th></th><th>Cross over</th><th>Cross under</th></tr>
+<tr><td><b>Principe</b></td><td>Le CGC se déplace <b>par-dessus</b> la planche</td><td>La planche se déplace <b>sous</b> un CGC stable</td></tr>
+<tr><td><b>Vitesse</b></td><td>Masse importante → changement <b>plutôt lent</b></td><td>Masse moindre → changement <b>plutôt rapide</b></td></tr>
+<tr><td><b>Dérapé</b></td><td>rotation › bascule | torsion + bascule<br><i>CGC se déplace légèrement dans l'axe transversal</i></td><td>rotation + flexion + angulation | torsion + flexion + angulation<br><i>utilisé notamment dans les bosses</i></td></tr>
+<tr><td><b>Carvé</b></td><td>bascule | extension › bascule | flexion › bascule<br><i>CGC se déplace fortement dans l'axe transversal</i></td><td>flexion + bascule/angulation</td></tr>
+</table></div>
+<p style="margin-bottom:0">En pratique, des principes <b>mixtes</b> sont souvent utilisés selon la situation présente.</p>
+</div>
+
+<div class="card">
+<h3>Principes de conduite</h3>
+<div class="tw"><table>
+<tr><th></th><th>Dérapé</th><th>Coupé (carvé)</th></tr>
+<tr><td><b>Angle de prise de carre</b></td><td>Petit</td><td>Grand</td></tr>
+<tr><td><b>Angle d'attaque</b></td><td>Grand</td><td>Petit</td></tr>
+<tr><td><b>Phase de dérapage</b></td><td>Grande</td><td>La plus petite possible</td></tr>
+<tr><td><b>Déformation de la planche</b></td><td>Petite</td><td>Grande</td></tr>
+<tr><td><b>Conduite</b></td><td>Flexion/extension de l'articulation de la cheville</td><td>Bascule/angulation dans l'axe transversal</td></tr>
+<tr><td><b>Réduire le rayon</b></td><td>Augmenter l'<b>angle d'attaque</b></td><td>Augmenter l'<b>angle de prise de carre</b> et la déformation</td></tr>
+</table></div>
+<p style="margin-bottom:0;font-style:italic;color:var(--muted)">« La trace est le meilleur contrôle pour voir si le virage était dérapé ou coupé. La trace a toujours raison. »</p>
+</div>
+
+<div class="card">
+<h3>Mouvements clés</h3>
+<p><b>Composants fonctionnels du contrôle des mouvements</b> : sans eux, les fonctions de l'engin ne peuvent être déclenchées ou contrôlées. Leur combinaison s'appelle <b>séquence de mouvements</b>.</p>
+<ul>
+<li>Haut du corps → influence <b>indirecte</b> sur l'engin. Bas du corps → influence <b>directe</b>.</li>
+<li>Le tronc relie les deux : une bonne stabilité du tronc = meilleure transmission à la planche.</li>
+<li>Flexion/extension symétrique ou asymétrique des <b>chevilles</b> → augmente ou réduit la prise de carre.</li>
+<li>Plus la planche est sur les carres, plus l'appui est important et plus le rayon peut être court.</li>
+<li>Flexion/extension <b>alternées</b> des pieds dans l'axe transversal → produit une <b>torsion</b> dans la planche (déclenchement de virages, dérapage dans la traversée).</li>
+</ul>
+<p style="margin-bottom:0">Le mouvement produit soit un déplacement <b>vertical</b> du CGC (MC flexion/extension), soit un déplacement le long de l'axe <b>longitudinal ou transversal</b> (MC bascule/angulation).</p>
+</div>
+
+<div class="card">
+<h3>Résistance de la neige</h3>
+<p>En l'utilisant de manière dosée, on peut maintenir son équilibre, contrôler sa vitesse, changer de direction ou décoller. Si la qualité de la neige change, sa résistance change aussi.</p>
+<h4>Trois types</h4>
+<ul>
+<li><b>Résistance directrice</b> — entre la planche et la neige, influencée par les mouvements et le type de neige.</li>
+<li><b>Résistance au frottement</b> — entre semelle ou carre et neige, dans le sens de la glisse ou perpendiculairement.</li>
+<li><b>Force de soutien du sol</b> — quand la planche s'enfonce dans la neige molle (poudreuse, neige fondante). C'est pourquoi ces neiges sont plus fatigantes.</li>
+</ul>
+<h4>Trois usages</h4>
+<ul style="margin-bottom:0">
+<li><b>Rechercher</b> (augmenter) — augmenter la prise de carres, tourner l'engin, prendre appui dessus.</li>
+<li><b>Utiliser</b> — augmenter la prise de carres ou prendre appui.</li>
+<li><b>Surmonter</b> (diminuer) — réduire la prise de carres (mise à plat), tourner, quitter l'appui.</li>
+</ul>
+<em class="src">Sur piste dure on cherche la résistance avec les carres ; dans la neige molle plutôt avec la semelle.</em>
+</div>
+
+<div class="card">
+<h3>Biomécanique</h3>
+<p>Une force a toujours un <b>point d'application</b>, une <b>direction</b> et une <b>intensité</b>.</p>
+<h4>Forces internes — modes de contraction</h4>
+<ul>
+<li><b>Isométrique</b> (statique) — le muscle maintient une position sans changer de longueur (position groupée).</li>
+<li><b>Concentrique</b> (motrice) — le muscle se raccourcit (impulsion d'un saut).</li>
+<li><b>Excentrique</b> (freinante) — le muscle s'allonge en contrôlant (réception d'un saut).</li>
+<li><b>Réactive</b> (cycle rapide) — passage immédiat du freinage à la poussée (saut enchaîné après réception).</li>
+</ul>
+<h4>Forces externes</h4>
+<ul style="margin-bottom:0">
+<li><b>Force de gravité (poids)</b> — attire le corps vers le bas.</li>
+<li><b>Force normale</b> — la neige pousse le corps vers le haut.</li>
+<li><b>Force de glissement</b> — fait descendre la pente ; combinaison de la gravité et de l'inclinaison.</li>
+<li><b>Force de frottement</b> — freine le mouvement entre l'engin et la neige.</li>
+<li><b>Force centrifuge</b> — tire vers l'extérieur du virage.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Backflip — fiche officielle</h3>
+<p><b>Prérequis :</b> Basic air. <b>Key points :</b> sauter et atterrir en fullbase · déclencher vers le haut · générer la rotation lors du déclenchement.</p>
+<div class="tw"><table>
+<tr><th>Phase</th><th>Mouvement</th></tr>
+<tr><td>Préparation</td><td>Prendre l'élan en position de base.</td></tr>
+<tr><td>Déclenchement</td><td>Bascule/angulation du pied arrière en direction du tail. Extension des hanches et bascule/angulation vers le tail. C'est ce qui initie la rotation.</td></tr>
+<tr><td>Principale</td><td>Fléchir les genoux pour une position stable en l'air.</td></tr>
+<tr><td>Finale</td><td>Arrêter la rotation par une extension. Atterrir en fullbase, amortir par flexion des deux genoux.</td></tr>
+</table></div>
+<p style="margin-bottom:0"><b>Conseils :</b> la position des hanches au décollage détermine l'axe du backflip · repérer l'atterrissage le plus tôt possible après le début de la rotation.</p>
+</div>
+
+<div class="card">
+<h3>Basic air</h3>
+<p><b>Prérequis :</b> Ollie. <b>Key points :</b> prise d'élan et décollage en fullbase · bras et épaules parallèles à la planche · déclenchement adapté à l'installation · amortir par une forte flexion des genoux.</p>
+<p style="margin-bottom:0"><b>Déclenchement :</b> résister à la compression dans la transition, basculer/anguler dans l'axe longitudinal en direction du tail, déclencher sur la jambe arrière. <b>Vol :</b> position compacte, s'orienter vers la zone d'atterrissage. <b>Suite :</b> Grab air, Shifty air.</p>
+</div>
+
+<div class="card">
+<h3>One-foot</h3>
+<ul>
+<li><b>Glisser sur le plat</b> — petits pas, pied libre proche de la planche.</li>
+<li><b>Monter en escalier</b> — planche à angle droit par rapport à la ligne de pente sur la carre amont, jambe libre au-dessus de la planche.</li>
+<li><b>Glisser en fullbase</b> — pied libre entre les fixations, poids sur les deux pieds, pied arrière contre la fixation arrière.</li>
+<li><b>Freiner</b> — déplacer le pied libre en direction de la carre.</li>
+</ul>
+<p style="margin-bottom:0">La forme de mouvement qui suit officiellement est <b>« Monter en téléski »</b>. C'est l'argument du cas pratique 1, validé par leur propre progression.</p>
+</div>
+
+<div class="card sunk">
+<h3>Repères de l'inventaire</h3>
+<p style="margin-bottom:0"><b>Virages :</b> basic turn dérapé · virage par extension / flexion / rotation dérapé · basic turn carvé · virage par extension / flexion carvé · one edge turn · bodycarve · technique de compétition · virage court · virage court pré-/co-rotation · virage court co-/contre-rotation · virage de bosses · bank turn.<br>
+<b>Glisse :</b> fullbase · dérapant (ligne de pente / traversée) · coupant · pousser et amortir (roller) · speedcheck.<br>
+<b>Sauts :</b> basic air · grab air · shifty air · set up · fs/bs 180° · fs/bs 360° · backflip · frontflip · halfpipe (basic run, alley oop, air to fakie, fs/bs 360°).</p>
+</div>
+`},
+
+/* ───────────── 8. PÉDAGOGIE ───────────── */
+{id:"peda", nav:"Pédagogie", html:`
+<span class="lbl">Enseigner le sport</span>
+<h2>Didactique et conduite de leçon</h2>
+
+<div class="card">
+<h3>Structure de la leçon — quatre parties</h3>
+<div class="tw"><table>
+<tr><th>Introduction</th><th>Échauffement</th><th>Partie principale</th><th>Retour au calme</th></tr>
+<tr>
+<td>Saluer, engager la conversation · clarifier les besoins · présenter le programme · discuter de l'organisation (matériel, transport, restaurant) · se mettre en jambes</td>
+<td>S'orienter vers l'objectif · dresser un état des lieux (analyser l'état actuel) · choisir le terrain optimal · connaître le domaine skiable</td>
+<td>Choisir les exercices selon les objectifs individuels · donner des feed-back positifs · observer les émotions et y réagir · s'immerger dans l'univers de la montagne</td>
+<td>Vérifier les objectifs · montrer les progrès · définir les étapes ultérieures et les prochains objectifs</td>
+</tr>
+</table></div>
+</div>
+
+<div class="card">
+<h3>Modèle de Senninger — trois zones</h3>
+<ul>
+<li><b>Zone de confort</b> — ce qui est déjà maîtrisé. Aucun apprentissage.</li>
+<li><b>Zone d'apprentissage</b> — exigeant mais réalisable. C'est là que ça se passe.</li>
+<li><b>Zone de panique</b> — la peur bloque. L'apprentissage s'arrête.</li>
+</ul>
+<p style="margin-bottom:0">Le rôle de l'enseignant : <b>faire sortir l'apprenant de sa zone de confort de manière ciblée, sans le pousser dans la zone de panique</b>. Des tâches exigeantes mais réalisables, une structure claire, des encouragements et des feed-back constructifs.</p>
+</div>
+
+<div class="card">
+<h3>Stades de développement</h3>
+<p>L'enseignement s'adapte à l'âge et au niveau de développement. Le corps en croissance ne supporte qu'une charge limitée. <b>Des enfants du même âge peuvent présenter des niveaux très différents</b> et ne se rattachent pas toujours clairement à un groupe d'âge.</p>
+<ul>
+<li>Âge préscolaire (2–5 ans)</li>
+<li>Début de la scolarité (5–9 ans)</li>
+<li>Fin de l'âge scolaire (9–12 ans)</li>
+<li>Adolescents (12–20 ans)</li>
+<li>Adultes (dès 18 ans)</li>
+</ul>
+<p style="margin-bottom:0">Entre <b>9 et 18 ans</b> : transition vers l'âge adulte, avec de nombreux changements physiques, émotionnels et sociaux. L'enseignant doit reconnaître la motivation, les besoins et les défis propres aux adolescents.</p>
+<em class="src">Quel que soit l'âge : adapter l'environnement d'apprentissage avec flexibilité, fournir des structures claires, accentuer les retours positifs, transmettre le plaisir.</em>
+</div>
+
+<div class="card">
+<h3>Canaux de perception</h3>
+<p><b>Externes :</b> vue (visuel) · ouïe (auditif) · toucher (tactile). <b>Internes :</b> sensations motrices (kinesthésique) · équilibre interne (vestibulaire).</p>
+<ul>
+<li><b>Montrer</b> (visuel) — démonstration claire et compréhensible.</li>
+<li><b>Expliquer</b> (auditif) — consignes verbales, images simples, métaphores.</li>
+<li><b>Sentir</b> (tactile, kinesthésique, vestibulaire) — aides à l'apprentissage et toucher, <b>avec consentement préalable</b>.</li>
+</ul>
+<h4>Démonstrations</h4>
+<p style="margin-bottom:0">Les enfants apprennent particulièrement bien par imitation · reproduire en miroir est difficile, donc <b>montrer de dos</b> au groupe · adapter la vitesse · répéter plusieurs fois, <b>et en switch</b> en snowboard · utiliser des zones planes pour démontrer lentement en statique.</p>
+</div>
+
+<div class="card">
+<h3>Objectifs d'apprentissage</h3>
+<h4>Trois types</h4>
+<ul>
+<li><b>Développement</b> — comportement (esprit d'équipe, concentration), technique (glisse, exécution d'un saut), tactique (agir selon la situation).</li>
+<li><b>Performance</b> — en compétition (hauteur de saut, temps, score) ou de classement (qualification, podium).</li>
+<li><b>Rêve</b> — images mentales qui stimulent l'imagination : motivation, résilience, construction de l'identité, sentiment de sens.</li>
+</ul>
+<h4>Motivation</h4>
+<p><b>Intrinsèque</b> : le plaisir de l'activité elle-même, l'énergie vient de la personne. <b>Extrinsèque</b> : incitations extérieures, récompenses, évitement de sanctions. L'intrinsèque est généralement <b>plus forte et plus stable</b>.</p>
+<p style="margin-bottom:0">« Il est particulièrement important d'<b>impliquer activement les participants dans la définition des objectifs</b>. Ce n'est que de cette manière qu'une motivation durable et personnelle peut être encouragée. » Objectifs individuels, réalistes et stimulants, adaptés aux capacités, à l'âge et au niveau — <b>SMART</b>. Des objectifs principaux on déduit des objectifs intermédiaires par leçon.</p>
+</div>
+
+<div class="card">
+<h3>Observer de manière ciblée</h3>
+<p>Analyser les points clés d'une forme de mouvement et identifier les <b>écarts entre l'état actuel et l'état visé</b> à chaque phase. C'est la condition d'un feed-back pertinent.</p>
+<p>Observer signifie regarder <b>successivement des aspects spécifiques, du bas vers le haut</b>. L'observation commence <b>avant</b> l'exécution, par les conditions préalables (la situation présente), puis le déroulement du mouvement, la trace dans la neige, et enfin la perception interne de l'apprenant.</p>
+<ul style="margin-bottom:0">
+<li>Observer ne veut pas dire seulement regarder — utilise tous tes canaux de perception.</li>
+<li>Décide à l'avance ce que tu observes, et concentre-toi sur quelques points à la fois.</li>
+<li>Entraîne ton œil à reconnaître rapidement les key points.</li>
+<li>La vidéo aide (comparer perception interne et vue externe) mais prend du temps et incite à trop corriger d'un coup. Développer son regard sans outil reste précieux.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Effectuer un feed-back ciblé</h3>
+<p>Le feed-back se base sur les <b>écarts observés</b> entre état actuel et état visé. Les six éléments d'un retour ciblé :</p>
+<ul>
+<li>Mettre en avant un point positif</li>
+<li>Recueillir la perception de soi de l'apprenant</li>
+<li>Formuler l'amélioration de manière positive</li>
+<li>Proposer une solution concrète</li>
+<li>Faire une démonstration</li>
+<li>Laisser du temps pour la mise en pratique</li>
+</ul>
+<h4>Règles pratiques</h4>
+<ul style="margin-bottom:0">
+<li>Décrire ce qui a été observé, être concret et honnête.</li>
+<li>Donner le feed-back <b>directement après le mouvement</b>.</li>
+<li>Se concentrer sur le point <b>actuellement le plus important</b>.</li>
+<li>Formulations courtes et claires ; langage imagé et métaphores.</li>
+<li>Chaque hôte devrait recevoir <b>au minimum un feed-back par leçon</b>.</li>
+<li>Des feed-back trop fréquents sont source de stress — laisser le temps d'affiner sa propre perception.</li>
+<li>En groupe : aborder les points généraux, l'individuel seulement si l'écart est fort.</li>
+<li>Recevoir un feed-back : écouter, <b>ne pas se défendre</b>, poser des questions, accueillir avec reconnaissance.</li>
+</ul>
+<em class="src">« Je ne sais pas ce que j'ai dit avant d'avoir entendu la réponse de mon interlocuteur. » — Watzlawick</em>
+</div>
+
+<div class="card">
+<h3>Coaching</h3>
+<p>Processus de développement individuel : définir des objectifs, relever des défis, développer le potentiel. Repose sur la <b>confiance</b>, une <b>communication active</b> et un travail <b>axé sur les solutions</b> par des questions ciblées et des feed-back.</p>
+<h4>Techniques de questionnement</h4>
+<ul style="margin-bottom:0">
+<li><b>Ouverte</b> — « Comment puis-je t'aider aujourd'hui pour que tu te sentes plus en confiance ? »</li>
+<li><b>Axée sur les ressources</b> — « Que peux-tu faire différemment à la prochaine tentative pour rester plus stable ? »</li>
+<li><b>Hypothétique / question miracle</b> — « Si tu te réveillais demain en maîtrisant toutes les descentes, quelle serait la première chose que tu remarquerais ? »</li>
+<li><b>Circulaire</b> — « Comment ta camarade aurait-elle décrit ta façon de tourner aujourd'hui ? »</li>
+<li><b>Question d'échelle</b> — « Sur une échelle de 1 à 10, où en es-tu ? »</li>
+<li><b>Paradoxale</b> — « Que devrais-tu faire pour être aussi essoufflé qu'aujourd'hui ? »</li>
+</ul>
+<em class="src">Six facteurs d'un coaching efficace selon Linz (2004).</em>
+</div>
+
+<div class="card">
+<h3>Principe de la variation</h3>
+<p>« Apprendre, c'est pratiquer ; et pratiquer, c'est répéter <b>sans refaire exactement la même chose</b>. » (Bernstein)</p>
+<p style="margin-bottom:0">En variant la tâche motrice, on la rend plus facile, plus difficile, ou adaptée à la situation. Axes de variation : <b>social</b> (course, suivre dans la trace) · <b>matériel</b> (anneaux dans les mains) · <b>en fonction des capacités</b> · <b>situationnel</b> (neige poudreuse) · <b>personnel / vestibulaire</b> (descendre le plus lentement possible sans tomber).</p>
+</div>
+
+<div class="card">
+<h3>Méthodes implicites et explicites</h3>
+<div class="tw"><table>
+<tr><th>Type</th><th>Méthode</th><th>Caractéristique</th><th>Exemple</th></tr>
+<tr><td rowspan="3"><b>Explicite</b></td><td>Apprentissage explicite</td><td>Conscient, basé sur des règles, verbalisable</td><td>« Tendre les jambes lors du saut »</td></tr>
+<tr><td>Feed-back vidéo</td><td>Retour visuel immédiat</td><td>Analyse sur tablette après un saut</td></tr>
+<tr><td>Apprentissage autodirigé</td><td>Responsabilité individuelle, auto-coaching</td><td>L'athlète réfléchit au choix de trajectoire</td></tr>
+<tr><td rowspan="3"><b>Implicite</b></td><td>Apprentissage implicite</td><td>Inconscient, intuitif, non verbalisable</td><td>Métaphore : « le bâton comme une lance »</td></tr>
+<tr><td>Apprentissage variable</td><td>Variations ciblées, auto-organisation</td><td>Trois parcours différents en géant</td></tr>
+<tr><td>Attention externe</td><td>Focus sur l'effet du mouvement plutôt que sur le corps</td><td>« Tracer la trace avec le ski extérieur »</td></tr>
+</table></div>
+<p style="margin-bottom:0">→ L'explicite apporte <b>structure</b> et aide à l'entrée en matière. → L'implicite favorise <b>stabilité, intuition et adaptation</b>. Varier consciemment selon le client, l'objectif, le niveau et la situation présente.</p>
+</div>
+
+<div class="card">
+<h3>Climat propice à l'apprentissage</h3>
+<ul style="margin-bottom:0">
+<li>Valoriser et traiter tous les apprenants de manière <b>égale</b>, s'intéresser à chacun.</li>
+<li>Favoriser le <b>sentiment d'appartenance</b> dès le départ (poignée de main commune, jeux de groupe à objectif collectif, remontées ensemble).</li>
+<li>Éveiller l'enthousiasme et le plaisir · exploiter les erreurs · impliquer enfants et jeunes · apprendre à connaître ses clients (hobbies, école, travail) et les intégrer au cours.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Tâches attrayantes</h3>
+<ul style="margin-bottom:0">
+<li>Donner des tâches stimulantes avec des instructions <b>techniquement correctes</b>.</li>
+<li>Donner des feed-back ciblés et constructifs <b>sans tarder</b>.</li>
+<li>Permettre des expériences gratifiantes <b>seul et en groupe</b>.</li>
+<li>Prévoir et appliquer des <b>formes d'organisation variées</b>.</li>
+</ul>
+<em class="src">Cet accompagnement de qualité constitue la « marque de fabrique » d'un enseignant de sports de neige.</em>
+</div>
+`},
+
+/* ───────────── 9. FICHES ───────────── */
+{id:"fiches", nav:"Fiches", html:`
+<span class="lbl">Auto-test</span>
+<h2>Fiches</h2>
+<p>Soixante questions sur ce que les experts peuvent vérifier. Clique pour retourner, flèches pour naviguer.</p>
+<div class="chips" id="chips"></div>
+<div class="deck-top"><span class="counter" id="cnt">01 / 60</span>
+<button id="shuf" style="font-family:var(--display);font-size:12px;letter-spacing:.06em;text-transform:uppercase;background:transparent;border:1px solid var(--line);border-radius:3px;padding:6px 12px;color:var(--muted);cursor:pointer">Mélanger</button></div>
+<div class="flash" id="card" tabindex="0" role="button"><div class="side" id="side">Question</div><div id="face" class="fq"></div></div>
+<p class="hint">Clic ou espace pour retourner · ← → pour changer</p>
+<div class="ctrls"><button id="prev">← Préc.</button><button id="flip">Retourner</button><button id="next">Suiv. →</button></div>
+`}
+];
+
+/* ───────── fiches ───────── */
+var CARDS = [
+["exam","Durée de la présentation ?","15 minutes, à ±1 minute près."],
+["exam","Durée et format de l'entretien ?","10 minutes. Quatre questions principales, 2 à 3 minutes chacune, de difficulté croissante, uniquement sur le portfolio et la présentation."],
+["exam","Les cinq critères évalués sur tout l'examen ?","Action fondée sur des arguments professionnels · capacité d'analyse et de réflexion · communication adaptée aux destinataires · comportement de conduite et capacité à prendre des décisions · lien avec la pratique et applicabilité."],
+["exam","Combien d'experts, et l'ordre des épreuves ?","Deux experts par épreuve, qui peuvent alterner entre les deux. L'ordre des épreuves n'est pas imposé."],
+["exam","Que doit montrer la présentation ?","Les principaux enseignements — pas un résumé du portfolio. Le fil rouge, et la visibilité de son propre processus d'apprentissage."],
+["exam","Quel matériel est autorisé pour la présentation ?","Flipchart, supports visuels ou PowerPoint, uniquement sur son ordinateur portable. Aucun écran externe n'est à disposition, et le bon fonctionnement est de la responsabilité du candidat."],
+["role","Les quatre phases d'un entretien de conflit (Weber 2005) ?","1. Communiquer le message (clarifier) · 2. Recueillir la réaction (percevoir les émotions) · 3. Chercher des solutions (ouvrir une perspective) · 4. Introduire dans le quotidien (stabiliser la relation)."],
+["role","Qu'évalue exactement le jeu de rôle ?","Exclusivement la communication et la conduite : comment on structure la situation, écoute activement, prend en compte différents points de vue, élabore des solutions et passe des accords contraignants."],
+["role","Durées du jeu de rôle ?","Environ 10 minutes de jeu, 10 minutes de préparation (5 d'informations + 5 de préparation), puis 10 minutes de réflexion dont 5 de préparation. Aucun matériel autorisé."],
+["role","L'erreur la plus fréquente en phase 2 ?","Interrompre trop tôt. Une étude sur des médecins mesure 75 % d'interruptions prématurées. L'écoute active signale du respect et crée de la confiance."],
+["role","Que veut dire « passer des accords contraignants » ?","Conclure en nommant les prochaines étapes à voix haute et en les faisant valider — la phase 4 du modèle, celle qui stabilise la relation."],
+["role","Messages à la première personne : pourquoi ?","« J'ai observé que… » décrit un fait et un ressenti ; « Tu as… » est un reproche qui déclenche la défense. On reste factuel et on garde l'autre disponible."],
+["role","La règle des 3 points ?","Se concentrer sur trois points essentiels maximum, pour que l'entretien reste factuel."],
+["role","Empathie ou pitié ?","« Comment je peux t'aider ? » a plus d'impact que « Ça me fait de la peine ». L'empathie ouvre une solution, la pitié enferme."],
+["role","Les quatre situations complexes typiques ?","Quand les émotions guident l'entretien · la communication dans les groupes sur la piste · les problèmes et conflits sur la piste · les messages négatifs et entretiens d'évaluation."],
+["role","Où mener un entretien de conflit sur la piste ?","Rapidement et factuellement, idéalement sur un terrain neutre — avant le prochain exercice ou sur le téléski — pour éviter l'escalade."],
+["reflexion","Les quatre cases de la réflexion ?","Ce qui est réussi · ce qui est moins réussi · les alternatives identifiées · les enseignements à tirer pour des situations futures."],
+["reflexion","Les deux exigences supplémentaires de la réflexion ?","Une évaluation de l'impact de son comportement sur son vis-à-vis, et des pistes concrètes de progression."],
+["cas","Qu'est-ce qu'un critical incident dans l'épreuve ?","Une information nouvelle ou un événement imprévu introduit en cours de cas pratique, qui oblige à adapter sa démarche."],
+["cas","Les trois facteurs de la situation présente ?","Situationnels (équipement, météo, neige, terrain) · personnels (connaissances préalables, besoins, forme, émotions) · normatifs (règles FIS, signalisation, directives, cadre légal)."],
+["droit","Les règles FIS ont-elles force de loi ?","Non. Les règles FIS et SKUS ne sont pas inscrites dans la loi, mais elles ont une importance juridique et peuvent être prises en compte par un tribunal en cas d'accident."],
+["droit","Règle FIS 1 et 2 ?","1. Ne pas mettre autrui en danger ou lui porter préjudice. 2. Descendre à vue ; adapter sa vitesse et son comportement à ses capacités personnelles et aux conditions."],
+["droit","Règle FIS 3 — la priorité ?","Respecter la trajectoire des skieurs et snowboardeurs situés en aval. Celui qui est devant, plus bas, a la priorité."],
+["droit","Règle FIS 5 et 6 ?","5. Avant de s'engager sur la piste ou de virer vers l'amont, regarder vers le haut. 6. Ne s'arrêter que sur le bord de la piste ou dans des endroits bien visibles."],
+["droit","Règles FIS 9 et 10 ?","9. Prêter secours et alerter les services de sauvetage. 10. Les personnes impliquées dans un accident, ainsi que les témoins, sont tenues de faire connaître leur identité."],
+["droit","Qu'est-ce que la SKUS ?","La Commission suisse pour la prévention des accidents sur les infrastructures pour sports de neige. Elle élabore des directives pour une pratique sans accident."],
+["droit","Les trois directives SKUS clés pour un enseignant ?","Les directives dans les snowparks · les directives supplémentaires pour snowboardeurs · la directive importante pour l'utilisation du télésiège."],
+["droit","Les quatre directives du snowpark ?","Regardez avant de sauter · planifiez votre passage · allez-y gentiment · le respect invite au respect."],
+["droit","Snowpark : quelle couleur de balisage ?","Orange. Les snowparks sont séparés des pistes normales et relèvent de la responsabilité des remontées mécaniques."],
+["droit","Que signifie une piste balisée en jaune ?","Réservée aux skieurs expérimentés : ni préparée régulièrement ni entièrement sécurisée, aménagée et contrôlée de manière limitée, sans contrôle final — mais sécurisée contre les dangers alpins."],
+["droit","Les pistes sont fermées la nuit : signalé ou non ?","Après le contrôle de fin de journée et jusqu'au début de l'exploitation le lendemain, toutes les installations sont en principe fermées. Cette fermeture nocturne n'est pas signalée spécialement mais elle est obligatoire."],
+["droit","Quand commence la responsabilité individuelle selon le Tribunal fédéral ?","Lorsque le skieur ne tient pas compte d'une signalisation claire (ATF 117 IV 416, consid. 5a)."],
+["droit","LAR/OAR : à partir de quand faut-il une autorisation ?","Dès le premier franc de chiffre d'affaires, pour l'enseignement hors des pistes sécurisées. Réservée aux titulaires du brevet fédéral ou formation équivalente."],
+["droit","Quel niveau de hors-piste est non soumis à autorisation ?","Jusqu'au niveau L de l'échelle CAS, ainsi que les pistes de descente jaunes ouvertes."],
+["droit","Jusqu'où peut-on aller avec une autorisation ?","Jusqu'au niveau de difficulté D (difficile), et uniquement sans risque de chute."],
+["droit","Qu'est-il interdit à tous les professeurs de sports de neige ?","Les ascensions avec moyens auxiliaires (crampons, corde, piolet) et les randonnées ou hors-piste sur glaciers."],
+["droit","Les obligations de diligence de l'art. 2 LAR ?","Informer les clients des dangers · vérifier les capacités des participants · s'assurer que le matériel est en bon état et les conditions appropriées · personnel qualifié · respecter la nature et l'environnement."],
+["droit","Montant minimal de la RC professionnelle ?","5 millions de francs."],
+["droit","Fréquence des formations continues ?","L'autorisation activités à risque se renouvelle tous les 4 ans avec une formation Backcountry (2 jours ou module Backcountry Specialist). La formation continue générale est obligatoire tous les 2 ans pour tous les professeurs."],
+["droit","Sur quelle base légale repose la responsabilité d'un professeur ?","Il n'existe aucune loi spécifique. La responsabilité se fonde sur le Code civil (CC), qui inclut le Code des obligations (CO) ; le pénal relève du Code pénal (CP)."],
+["droit","Quels articles du CO encadrent le contrat de professeur ?","Le mandat, art. 394 CO. Pour le degré de diligence, l'art. 398 CO renvoie à l'art. 321a CO (exécuter le travail avec soin et sauvegarder les intérêts légitimes de l'employeur)."],
+["droit","Peut-on invoquer une formation déficiente pour sa défense ?","Non. Les exigences envers un professeur diplômé sont strictes : on attend qu'il possède et apporte les connaissances requises."],
+["droit","Pourquoi une obligation de diligence accrue ?","Parce que le professeur est responsable de mineurs. Le non-respect peut entraîner une responsabilité civile, voire pénale dans les cas graves."],
+["droit","Les cinq étapes de la procédure en cas d'accident ?","1. Mettre le groupe en sécurité. 2. Sécuriser le lieu de l'accident. 3. Si nécessaire, alerter les secours (qui ? où ? quoi ?). 4. Rester auprès de la personne blessée. 5. Informer les proches et l'école."],
+["droit","Que contient la trousse de premiers secours d'un enseignant ?","Pansements et matériel de bandage, couverture de survie, gants médicaux, glucose. Plus les numéros : SOS/REGA, école de ski, contact des enfants."],
+["droit","La règle du 1,25 m ?","Les enfants mesurant moins de 1,25 m ne peuvent prendre un télésiège que s'ils sont accompagnés, et l'accompagnant doit pouvoir les aider en cas de besoin."],
+["droit","Règle spécifique aux snowboardeurs sur les remontées ?","Aux téléskis et aux télésièges, détacher la jambe arrière de la fixation."],
+["droit","Les quatre catégories d'assurances ?","Assurances sociales (obligatoires) · assurances accidents (obligatoires selon la loi) · responsabilité civile et indemnités journalières · assurances complémentaires ou spéciales."],
+["droit","La promesse de valeurs Swiss Snowsports ?","La santé psychique et physique de tous les participants est importante ; Swiss Snowsports n'accepte pas les comportements qui dépassent les limites, d'où qu'ils viennent."],
+["tech","Les 7 formes caractéristiques en snowboard ?","Gérer la situation présente · se déplacer avec des pas au plat et en pente · glisser et freiner dans une attitude stable · réaliser des virages adaptés au terrain · sauter et atterrir sur des installations · réaliser des tricks en jouant avec le terrain · slider sur boxes et rails."],
+["tech","Cross over ou cross under : lequel est rapide ?","Cross under. La planche se déplace sous un centre de gravité stable : moins de masse déplacée, changement de carres plus rapide. Le cross over déplace le CGC par-dessus la planche, donc plus lent."],
+["tech","Déclenchement cross under en dérapé ?","Rotation + flexion + angulation, ou torsion + flexion + angulation. Utilisé notamment dans les bosses."],
+["tech","Un virage coupé : quels angles ?","Grand angle de prise de carre, petit angle d'attaque. Phase de dérapage minimale, forte déformation de la planche."],
+["tech","Comment réduire le rayon d'un virage dérapé ?","En augmentant l'angle d'attaque. En carvé, on augmente l'angle de prise de carre et la déformation de la planche."],
+["tech","Par quoi se fait la conduite en dérapé ?","Surtout par flexion et extension de l'articulation de la cheville. En carvé, par bascule/angulation dans l'axe transversal."],
+["tech","Haut et bas du corps : quelle influence sur l'engin ?","Le bas du corps a une influence directe, le haut du corps une influence indirecte. La stabilité du tronc conditionne la transmission des mouvements à la planche."],
+["tech","Que produit une flexion/extension alternée des pieds ?","Une torsion dans la planche, dans l'axe transversal — utile pour le déclenchement de virages et le dérapage dans la traversée."],
+["tech","Les trois types de résistance de la neige ?","La résistance directrice (entre planche et neige) · la résistance au frottement (semelle ou carre) · la force de soutien du sol (quand la planche s'enfonce dans la neige molle)."],
+["tech","Rechercher, utiliser, surmonter la résistance ?","Rechercher et utiliser : augmenter la prise de carres, tourner l'engin, prendre appui. Surmonter : réduire la prise de carres (mise à plat), tourner, quitter l'appui."],
+["tech","Les quatre modes de contraction musculaire ?","Isométrique (statique, position groupée) · concentrique (motrice, impulsion) · excentrique (freinante, réception) · réactive (cycle rapide, saut enchaîné)."],
+["tech","Les principales forces externes ?","Force de gravité (poids) · force normale · force de glissement · force de frottement · force centrifuge."],
+["tech","Déclenchement du backflip en snowboard ?","Bascule/angulation du pied arrière en direction du tail, puis extension des hanches. C'est ce qui initie la rotation. La position des hanches au décollage détermine l'axe."],
+["tech","Phase finale du backflip ?","Arrêter la rotation par une extension, atterrir en fullbase, amortir par flexion des deux genoux. Repérer l'atterrissage le plus tôt possible après le début de la rotation."],
+["tech","Prérequis du backflip, et du basic air ?","Backflip : Basic air. Basic air : Ollie."],
+["tech","Key points du basic air ?","Prise d'élan et décollage en fullbase · bras et épaules parallèles à la planche · déclenchement adapté à l'installation · amortir par une forte flexion des genoux."],
+["tech","Quelle forme de mouvement suit le one-foot ?","Monter en téléski — ce qui confirme que le téléski est une difficulté technique répertoriée en snowboard."],
+["tech","One-foot : comment freiner ?","En déplaçant le pied libre en direction de la carre."],
+["peda","Les quatre parties d'une leçon ?","Introduction · échauffement · partie principale · retour au calme."],
+["peda","Que fait-on dans le retour au calme ?","Vérifier les objectifs, montrer les progrès, définir les étapes ultérieures et les prochains objectifs."],
+["peda","Les trois zones du modèle de Senninger ?","Zone de confort · zone d'apprentissage · zone de panique. Le rôle de l'enseignant est de faire sortir l'apprenant de sa zone de confort sans le pousser dans la panique."],
+["peda","Les cinq stades de développement ?","Âge préscolaire (2–5) · début de la scolarité (5–9) · fin de l'âge scolaire (9–12) · adolescents (12–20) · adultes (dès 18)."],
+["peda","Pourquoi ne pas se fier à l'âge seul ?","Parce que des enfants du même âge peuvent présenter des niveaux de développement très différents et ne se rattachent pas toujours clairement à un groupe d'âge."],
+["peda","Les cinq canaux de perception ?","Externes : visuel, auditif, tactile. Internes : kinesthésique (sensations motrices) et vestibulaire (équilibre interne)."],
+["peda","Pourquoi démontrer de dos au groupe ?","Parce qu'il est difficile de reproduire un mouvement en miroir. On adapte aussi la vitesse et on répète — en snowboard, également en switch."],
+["peda","Les trois types d'objectifs d'apprentissage ?","Objectifs de développement (comportement, technique, tactique) · objectifs de performance (compétition, classement) · objectifs de rêve."],
+["peda","Motivation intrinsèque ou extrinsèque : laquelle tient ?","L'intrinsèque est généralement plus forte et plus stable. La forme la plus durable naît quand les actions s'accordent aux objectifs et valeurs personnels."],
+["peda","Que dit la plateforme sur la fixation des objectifs ?","Qu'il est particulièrement important d'impliquer activement les participants dans leur définition — c'est la condition d'une motivation durable et personnelle."],
+["peda","Dans quel ordre observe-t-on un mouvement ?","Successivement, du bas vers le haut. L'observation commence avant l'exécution, par les conditions préalables, puis le déroulement, la trace dans la neige, et enfin la perception interne de l'apprenant."],
+["peda","Sur quoi se base un feed-back ciblé ?","Sur les écarts observés entre l'état actuel et l'état visé."],
+["peda","Combien de feed-back par leçon au minimum ?","Au moins un par hôte. Mais des feed-back trop fréquents sont source de stress : il faut laisser le temps d'affiner sa propre perception."],
+["peda","Comment recevoir un feed-back ?","Écouter sans se défendre, poser des questions si quelque chose n'est pas clair, accueillir avec reconnaissance."],
+["peda","Les axes du principe de la variation ?","Social · matériel · en fonction des capacités · situationnel · personnel (dont vestibulaire)."],
+["peda","Explicite ou implicite : que fait chacun ?","L'explicite apporte structure et aide à l'entrée en matière. L'implicite favorise stabilité, intuition et adaptation. On varie consciemment selon le client, l'objectif, le niveau et la situation."],
+["peda","Qu'est-ce que l'attention externe ?","Concentrer l'apprenant sur l'effet du mouvement plutôt que sur ses parties du corps — « tracer la trace avec le ski extérieur ». Meilleure performance, moindre charge cognitive."],
+["peda","Quelques techniques de questionnement en coaching ?","Ouverte · axée sur les ressources · hypothétique ou question miracle · circulaire · question d'échelle · paradoxale."],
+["peda","Comment créer un sentiment d'appartenance ?","Poignée de main commune pour l'accueil et les au revoir, jeux de groupe avec objectif collectif, remontées mécaniques prises ensemble."]
+];
+
+/* ───────── rendu ───────── */
+var nav=document.querySelector('nav'), panes=document.getElementById('panes');
+S.forEach(function(s,i){
+  var b=document.createElement('button');
+  b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===0?'true':'false');
+  b.textContent=s.nav; b.dataset.i=i; nav.appendChild(b);
+  var sec=document.createElement('section'); sec.id='sec-'+s.id; sec.innerHTML=s.html; sec.hidden=(i!==0);
+  panes.appendChild(sec);
+});
+var tabs=Array.prototype.slice.call(nav.children), secs=Array.prototype.slice.call(panes.children);
+tabs.forEach(function(b,i){ b.addEventListener('click', function(){
+  tabs.forEach(function(x,j){ x.setAttribute('aria-selected', j===i?'true':'false'); secs[j].hidden=(j!==i); });
+  try{ localStorage.setItem('bf_tab', String(i)); }catch(e){}
+  window.scrollTo({top:0,behavior:'smooth'});
+});});
+try{ var saved=parseInt(localStorage.getItem('bf_tab')||'0',10); if(saved>0 && saved<tabs.length) tabs[saved].click(); }catch(e){}
+
+/* ───────── fiches ───────── */
+var FILTERS=[["all","Toutes"],["exam","Examen"],["role","Jeu de rôle"],["reflexion","Réflexion"],["cas","Cas"],["droit","Droit"],["tech","Technique"],["peda","Pédagogie"]];
+var chips=document.getElementById('chips');
+var filter='all', pool=CARDS.slice(), idx=0, flipped=false;
+FILTERS.forEach(function(f){
+  var b=document.createElement('button'); b.textContent=f[1]; b.dataset.f=f[0];
+  b.setAttribute('aria-pressed', f[0]==='all'?'true':'false');
+  b.addEventListener('click', function(){
+    filter=f[0];
+    Array.prototype.forEach.call(chips.children,function(c){ c.setAttribute('aria-pressed', c.dataset.f===filter?'true':'false'); });
+    pool = filter==='all' ? CARDS.slice() : CARDS.filter(function(c){return c[0]===filter;});
+    idx=0; flipped=false; render();
+  });
+  chips.appendChild(b);
+});
+var card=document.getElementById('card'), face=document.getElementById('face'),
+    side=document.getElementById('side'), cnt=document.getElementById('cnt');
+function pad(n){return (n<10?'0':'')+n;}
+function render(){
+  if(!pool.length) return;
+  var c=pool[idx];
+  side.textContent = flipped?'Réponse':'Question';
+  face.className = flipped?'fa':'fq';
+  face.textContent = flipped?c[2]:c[1];
+  cnt.textContent = pad(idx+1)+' / '+pad(pool.length);
+}
+function move(d){ idx=(idx+d+pool.length)%pool.length; flipped=false; render(); }
+function flip(){ flipped=!flipped; render(); }
+card.addEventListener('click',flip);
+document.getElementById('flip').addEventListener('click',flip);
+document.getElementById('next').addEventListener('click',function(){move(1);});
+document.getElementById('prev').addEventListener('click',function(){move(-1);});
+document.getElementById('shuf').addEventListener('click',function(){
+  for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+  idx=0;flipped=false;render();
+});
+card.addEventListener('keydown',function(e){ if(e.key===' '||e.key==='Enter'){e.preventDefault();flip();} });
+document.addEventListener('keydown',function(e){
+  if(document.getElementById('sec-fiches').hidden) return;
+  if(e.key==='ArrowRight')move(1); else if(e.key==='ArrowLeft')move(-1);
+});
+render();
+
+/* hors-ligne, uniquement hors artifact */
+if('serviceWorker' in navigator && location.protocol==='https:' && !/claude/.test(location.hostname)){
+  try{ navigator.serviceWorker.register('sw.js'); }catch(e){}
+}
+})();
+</script>
+</body>
+</html>

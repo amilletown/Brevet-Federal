@@ -1,0 +1,17 @@
+{
+  "name": "Brevet Fédéral — Révisions Nottwil",
+  "short_name": "Brevet BF",
+  "description": "Révisions complètes pour l'examen du Brevet fédéral de professeur de sports de neige — snowboard.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F7F9",
+  "theme_color": "#C8102E",
+  "lang": "fr-CH",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
