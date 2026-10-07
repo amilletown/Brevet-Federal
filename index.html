@@ -78,6 +78,11 @@ section{padding-block:22px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:15px 17px;margin-bottom:13px}
 .card>*:last-child{margin-bottom:0}
 .card.sunk{background:var(--sunk)}
+/* citation a reciter telle quelle : barre d'accent + italique */
+.quote{margin:0 0 11px;padding:9px 13px;background:var(--sunk);border-left:3px solid var(--accent);
+  border-radius:0 2px 2px 0;font-style:italic;font-size:15.5px;line-height:1.5}
+.quote.bad{border-left-color:var(--muted);color:var(--muted);text-decoration:line-through;
+  text-decoration-color:var(--muted);text-decoration-thickness:1px}
 .pill{display:inline-block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--accent-soft);
   color:var(--accent);padding:3px 9px;border-radius:2px;margin-bottom:9px}
 
@@ -294,12 +299,57 @@ var S = [
 <div class="card">
 <h3>Quatre situations complexes typiques</h3>
 <ul style="margin:0">
-<li><b>Quand les émotions guident l'entretien</b> — l'échange quitte les faits. Parler délibérément de son propre mode de communication.</li>
-<li><b>Communication dans les groupes sur la piste</b> — rôles pas clairs, certains dominent. Les groupes performants : écoute active, respect mutuel, conflits traités de façon constructive, instruction claire.</li>
+<li><b>Quand les émotions guident l'entretien</b> — l'échange quitte les faits, les aspects relationnels dominent : un enfant exprime sa frustration face aux corrections ou entrave les instructions. L'entretien s'enlise. Il est alors utile de <b>parler délibérément de son propre mode de communication</b>.</li>
+<li><b>Communication dans les groupes sur la piste</b> — rôles pas clairs, certains enfants ou jeunes dominent, les émotions dictent la situation. Les groupes performants se distinguent par <b>l'écoute active, le respect mutuel, une approche constructive des conflits et une instruction claire de l'enseignant</b>. Exemple : en exerçant une descente, certains ne se sentent pas sûrs, d'autres veulent aller plus vite — tu modères, tu prends compte de tous les avis, tu identifies rapidement les tensions, et tu fais en sorte que chacun puisse s'exprimer et se sente en sécurité.</li>
 <li><b>Problèmes et conflits sur la piste</b> — objectifs, attentes ou rôles inconciliables. Entretien factuel rapide, idéalement sur terrain neutre (avant le prochain exercice, sur le téléski) pour éviter l'escalade.</li>
 <li><b>Messages négatifs et entretiens d'évaluation</b> — structure claire, langage honnête, conclusion respectueuse et motivante.</li>
 </ul>
 </div>
+
+<span class="pill">Banque de formulations — les phrases officielles, à placer telles quelles</span>
+<div class="card">
+<h3>L'élève de snowboard qui refuse de réessayer</h3>
+<p style="margin:0 0 6px">C'est l'exemple snowboard de la plateforme. Au lieu de gronder, l'enseignant dit :</p>
+<p class="quote">« Il me semble que nous nous trouvons maintenant dans une impasse. Je vois que cet exercice est actuellement frustrant pour toi. Parlons-en brièvement pour voir comment faire en sorte de le simplifier. »</p>
+<p style="margin:0">Trois mouvements en une phrase : nommer le blocage, reconnaître l'émotion, ouvrir sur la solution. C'est le modèle des 4 phases compressé — apprends-la par cœur, c'est ta phrase de secours universelle.</p>
+</div>
+
+<div class="card">
+<h3>L'enfant qui ne suit pas les instructions</h3>
+<p style="margin:0 0 6px"><b>Reproche à la deuxième personne</b> — ce qu'il ne faut pas dire :</p>
+<p class="quote bad">« Tu n'écoutes jamais ! »</p>
+<p style="margin:0 0 6px"><b>Message à la première personne</b> — la reformulation officielle :</p>
+<p class="quote">« J'ai le sentiment que tu n'as pas compris les instructions pour l'instant. Je te les explique volontiers encore une fois pour que tu puisses skier en toute sécurité. »</p>
+<p style="margin:0">Note la structure : constat sur <b>toi</b>, pas sur lui ; « pour l'instant » qui laisse la porte ouverte ; et la justification par <b>la sécurité</b>, pas par l'autorité.</p>
+</div>
+
+<span class="pill">Les dix principes de communication — facteurs de succès</span>
+<div class="card">
+<div class="kv">
+<div><span class="mk"></span><span><b>Écoute active</b> — paraphraser, demander des précisions, prêter attention aux signaux non verbaux (langage corporel, mimiques). Montrer de la compréhension. <i>Ne pas interrompre, laisser tous les participants s'exprimer.</i></span></div>
+<div><span class="mk"></span><span><b>Identifier les émotions, rester neutre mais factuel</b> — et identifier également <b>ses propres</b> émotions, puis les analyser.</span></div>
+<div><span class="mk"></span><span><b>Identifier tôt les différences d'attentes</b></span></div>
+<div><span class="mk"></span><span><b>Montrer du respect, aussi en cas de conflit</b></span></div>
+<div><span class="mk"></span><span><b>Définir clairement l'objectif et le thème</b>, préparer les faits</span></div>
+<div><span class="mk"></span><span><b>Utiliser des exemples concrets</b> au lieu de généralisations</span></div>
+<div><span class="mk"></span><span><b>Formuler la critique de façon factuelle, compréhensible et motivante</b>, dans un langage clair et simple</span></div>
+<div><span class="mk"></span><span><b>Messages à la première personne</b> au lieu de reproches à la deuxième personne</span></div>
+<div><span class="mk"></span><span><b>Être ouvert aux perspectives et aux compromis</b></span></div>
+<div><span class="mk"></span><span><b>Suivi de l'entretien</b> — prendre des notes, planifier un suivi, proposer des étapes pour une solution</span></div>
+</div>
+</div>
+
+<div class="card sunk">
+<h3>Les quatre objectifs du module « Communiquer dans des situations complexes »</h3>
+<p style="margin:0 0 7px">Ce sont les objectifs officiels. S'ils te demandent ce que tu cherches à atteindre dans l'échange, la réponse est là.</p>
+<ul style="margin:0">
+<li><b>Percevoir tôt les conflits</b> au sein de l'équipe ou avec les hôtes et les aborder en fonction de la situation afin de les résoudre de façon constructive.</li>
+<li><b>Identifier les différents besoins</b> des hôtes, participants et membres de l'équipe, <b>et les impliquer dans les décisions</b>.</li>
+<li>Entretenir une relation basée sur <b>la confiance, le respect et le soutien</b>.</li>
+<li>Communiquer dans toutes les situations de façon <b>claire, compréhensible et motivante</b>, aussi bien sur le plan <b>verbal que non verbal</b>.</li>
+</ul>
+</div>
+<p>Le deuxième objectif est ton point faible déclaré dans le portfolio — « je fixe souvent les objectifs seul ». Si l'entretien y revient, tu as ici la formulation officielle qui montre que tu sais exactement quelle est la norme attendue.</p>
 
 <span class="pill">L'exemple officiel publié — étude de cas 2 : nature, environnement, durabilité</span>
 <div class="card">
@@ -824,6 +874,18 @@ var S = [
 
 /* ───────── fiches ───────── */
 var CARDS = [
+["role","La phrase officielle quand un élève de snowboard refuse de réessayer un exercice ?","« Il me semble que nous nous trouvons maintenant dans une impasse. Je vois que cet exercice est actuellement frustrant pour toi. Parlons-en brièvement pour voir comment faire en sorte de le simplifier. » — nommer le blocage, reconnaître l'émotion, ouvrir sur la solution."],
+["role","Reformule en message à la première personne : « Tu n'écoutes jamais ! »","« J'ai le sentiment que tu n'as pas compris les instructions pour l'instant. Je te les explique volontiers encore une fois pour que tu puisses skier en toute sécurité. » — constat sur soi, « pour l'instant » qui laisse la porte ouverte, justification par la sécurité et non par l'autorité."],
+["role","Les quatre objectifs du module « Communiquer dans des situations complexes » ?","1. Percevoir tôt les conflits et les aborder pour les résoudre de façon constructive. 2. Identifier les différents besoins et impliquer les personnes dans les décisions. 3. Entretenir une relation basée sur la confiance, le respect et le soutien. 4. Communiquer de façon claire, compréhensible et motivante, verbalement et non verbalement."],
+["role","Qu'est-ce qui rend une communication délicate, selon la plateforme ?","Les malentendus, les émotions, des intérêts différents ou les hiérarchies. De telles situations exigent une action consciente, réfléchie et structurée."],
+["role","Que faire quand les émotions guident l'entretien ?","Quand l'échange ne se déroule plus sur la base des faits mais des émotions ou que les aspects relationnels dominent, l'entretien s'enlise. Il est alors utile de parler délibérément de son propre mode de communication."],
+["role","À quoi reconnaît-on un groupe performant sur la piste ?","Écoute active, respect mutuel, approche constructive des conflits, et instruction claire de l'enseignant."],
+["role","Groupe où certains ne se sentent pas sûrs et d'autres veulent aller plus vite — que fais-tu ?","Tu modères : tu prends compte de tous les avis, tu identifies rapidement les tensions, et tu fais en sorte que chacun puisse s'exprimer et se sente en sécurité."],
+["role","Les deux volets de « identifier les émotions » ?","Identifier les émotions de l'interlocuteur en restant neutre mais factuel — et identifier également ses propres émotions, puis les analyser."],
+["role","Que dit le principe sur l'écoute active, concrètement ?","Paraphraser, demander des précisions, prêter attention aux signaux non verbaux (langage corporel, mimiques), montrer de la compréhension. Concrètement : ne pas interrompre, laisser tous les participants s'exprimer."],
+["role","Comment formuler une critique, selon les principes officiels ?","De façon factuelle, compréhensible et motivante, dans un langage clair et simple — avec des exemples concrets au lieu de généralisations, et des messages à la première personne au lieu de reproches à la deuxième."],
+["role","Les trois temps du suivi d'un entretien ?","Enregistrer les résultats et reprendre si nécessaire ; réflexion (qu'est-ce qui a bien marché, que peut-on améliorer) ; demander un feed-back et apporter des modifications. Concrètement : prendre des notes, planifier un suivi, proposer des étapes pour une solution."],
+["role","Les quatre points de la préparation d'un entretien ?","Définir clairement le thème et l'objectif · rassembler les faits et les observations · réfléchir à sa propre attitude · définir le cadre : lieu, moment, ambiance."],
 ["exam","Durée de la présentation ?","15 minutes, à ±1 minute près."],
 ["exam","Durée et format de l'entretien ?","10 minutes. Quatre questions principales, 2 à 3 minutes chacune, de difficulté croissante, uniquement sur le portfolio et la présentation."],
 ["exam","Les cinq critères évalués sur tout l'examen ?","Action fondée sur des arguments professionnels · capacité d'analyse et de réflexion · communication adaptée aux destinataires · comportement de conduite et capacité à prendre des décisions · lien avec la pratique et applicabilité."],
